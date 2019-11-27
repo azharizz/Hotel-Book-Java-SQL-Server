@@ -47,9 +47,21 @@ public class MainEmployee extends javax.swing.JFrame {
         sdbrProfileHotel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        pnlMainEmp = new javax.swing.JPanel();
+        pnlGuest = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        pnlStatus = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        pnlFinancial = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jLabel9 = new javax.swing.JLabel();
+        pnlProfileHotel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(842, 529));
 
         jSplitPane1.setDividerLocation(284);
         jSplitPane1.setDividerSize(1);
@@ -198,7 +210,7 @@ public class MainEmployee extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(154, Short.MAX_VALUE)
+                .addContainerGap(203, Short.MAX_VALUE)
                 .addComponent(sdbrGuest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(sdbrStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -211,20 +223,140 @@ public class MainEmployee extends javax.swing.JFrame {
 
         jSplitPane1.setLeftComponent(jPanel1);
 
-        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMainEmp.setBackground(new java.awt.Color(255, 255, 255));
+        pnlMainEmp.setLayout(new java.awt.CardLayout());
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "No KTP", "Nama", "Jenis Kamar", "Tanggal Check In", "Tanggal Check Out"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        javax.swing.GroupLayout pnlGuestLayout = new javax.swing.GroupLayout(pnlGuest);
+        pnlGuest.setLayout(pnlGuestLayout);
+        pnlGuestLayout.setHorizontalGroup(
+            pnlGuestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
+        );
+        pnlGuestLayout.setVerticalGroup(
+            pnlGuestLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlGuestLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 101, Short.MAX_VALUE))
+        );
+
+        pnlMainEmp.add(pnlGuest, "card2");
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID Pesanan", "No. KTP", "Jumlah Tagihan", "Status"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTable2);
+
+        javax.swing.GroupLayout pnlStatusLayout = new javax.swing.GroupLayout(pnlStatus);
+        pnlStatus.setLayout(pnlStatusLayout);
+        pnlStatusLayout.setHorizontalGroup(
+            pnlStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
+        );
+        pnlStatusLayout.setVerticalGroup(
+            pnlStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlStatusLayout.createSequentialGroup()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 101, Short.MAX_VALUE))
+        );
+
+        pnlMainEmp.add(pnlStatus, "card3");
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "ID Pesanan", "Tangal Check In", "Jumlah Tagihan"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTable3);
+
+        jLabel9.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jLabel9.setText("TOTAL PENDAPATAN :");
+
+        javax.swing.GroupLayout pnlFinancialLayout = new javax.swing.GroupLayout(pnlFinancial);
+        pnlFinancial.setLayout(pnlFinancialLayout);
+        pnlFinancialLayout.setHorizontalGroup(
+            pnlFinancialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
+            .addGroup(pnlFinancialLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        pnlFinancialLayout.setVerticalGroup(
+            pnlFinancialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFinancialLayout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90)
+                .addComponent(jLabel9)
+                .addContainerGap(94, Short.MAX_VALUE))
+        );
+
+        pnlMainEmp.add(pnlFinancial, "card4");
+
+        javax.swing.GroupLayout pnlProfileHotelLayout = new javax.swing.GroupLayout(pnlProfileHotel);
+        pnlProfileHotel.setLayout(pnlProfileHotelLayout);
+        pnlProfileHotelLayout.setHorizontalGroup(
+            pnlProfileHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 556, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
+        pnlProfileHotelLayout.setVerticalGroup(
+            pnlProfileHotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 527, Short.MAX_VALUE)
         );
 
-        jSplitPane1.setRightComponent(jPanel2);
+        pnlMainEmp.add(pnlProfileHotel, "card5");
+
+        jSplitPane1.setRightComponent(pnlMainEmp);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -246,6 +378,11 @@ public class MainEmployee extends javax.swing.JFrame {
         sdbrStatus.setBackground(new java.awt.Color(108, 91, 123));
         sdbrFinancial.setBackground(new java.awt.Color(108, 91, 123));
         sdbrProfileHotel.setBackground(new java.awt.Color(108, 91, 123));
+        
+        pnlMainEmp.removeAll();
+        pnlMainEmp.add(pnlGuest);
+        pnlMainEmp.repaint();
+        pnlMainEmp.revalidate();
     }//GEN-LAST:event_sdbrGuestMouseClicked
 
     private void sdbrStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sdbrStatusMouseClicked
@@ -254,6 +391,11 @@ public class MainEmployee extends javax.swing.JFrame {
         sdbrStatus.setBackground(new java.awt.Color(192, 108, 132));
         sdbrFinancial.setBackground(new java.awt.Color(108, 91, 123));
         sdbrProfileHotel.setBackground(new java.awt.Color(108, 91, 123));
+        
+        pnlMainEmp.removeAll();
+        pnlMainEmp.add(pnlStatus);
+        pnlMainEmp.repaint();
+        pnlMainEmp.revalidate();
     }//GEN-LAST:event_sdbrStatusMouseClicked
 
     private void sdbrFinancialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sdbrFinancialMouseClicked
@@ -262,6 +404,11 @@ public class MainEmployee extends javax.swing.JFrame {
         sdbrStatus.setBackground(new java.awt.Color(108, 91, 123));
         sdbrFinancial.setBackground(new java.awt.Color(192, 108, 132));
         sdbrProfileHotel.setBackground(new java.awt.Color(108, 91, 123));
+        
+        pnlMainEmp.removeAll();
+        pnlMainEmp.add(pnlFinancial);
+        pnlMainEmp.repaint();
+        pnlMainEmp.revalidate();
     }//GEN-LAST:event_sdbrFinancialMouseClicked
 
     private void sdbrProfileHotelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sdbrProfileHotelMouseClicked
@@ -270,6 +417,11 @@ public class MainEmployee extends javax.swing.JFrame {
         sdbrStatus.setBackground(new java.awt.Color(108, 91, 123));
         sdbrFinancial.setBackground(new java.awt.Color(108, 91, 123));
         sdbrProfileHotel.setBackground(new java.awt.Color(192, 108, 132));
+        
+        pnlMainEmp.removeAll();
+        pnlMainEmp.add(pnlProfileHotel);
+        pnlMainEmp.repaint();
+        pnlMainEmp.revalidate();
     }//GEN-LAST:event_sdbrProfileHotelMouseClicked
 
     /**
@@ -319,9 +471,20 @@ public class MainEmployee extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JPanel pnlFinancial;
+    private javax.swing.JPanel pnlGuest;
+    private javax.swing.JPanel pnlMainEmp;
+    private javax.swing.JPanel pnlProfileHotel;
+    private javax.swing.JPanel pnlStatus;
     private javax.swing.JPanel sdbrFinancial;
     private javax.swing.JPanel sdbrGuest;
     private javax.swing.JPanel sdbrProfileHotel;
