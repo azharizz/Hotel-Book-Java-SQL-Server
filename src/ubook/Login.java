@@ -217,7 +217,7 @@ public class Login extends javax.swing.JFrame {
         pnlLoginCusLayout.setHorizontalGroup(
             pnlLoginCusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlLoginCusLayout.createSequentialGroup()
-                .addGap(148, 148, 148)
+                .addGap(119, 119, 119)
                 .addGroup(pnlLoginCusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginCusLayout.createSequentialGroup()
                         .addComponent(jLabel11)
@@ -240,7 +240,7 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginCusLayout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addGap(32, 32, 32)))
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
         pnlLoginCusLayout.setVerticalGroup(
             pnlLoginCusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,7 +317,7 @@ public class Login extends javax.swing.JFrame {
         pnlLoginEmpLayout.setHorizontalGroup(
             pnlLoginEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlLoginEmpLayout.createSequentialGroup()
-                .addGap(148, 148, 148)
+                .addGap(119, 119, 119)
                 .addGroup(pnlLoginEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginEmpLayout.createSequentialGroup()
                         .addComponent(jLabel18)
@@ -335,7 +335,7 @@ public class Login extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginEmpLayout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addGap(32, 32, 32)))
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
         pnlLoginEmpLayout.setVerticalGroup(
             pnlLoginEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -478,7 +478,7 @@ public class Login extends javax.swing.JFrame {
                             .addComponent(jRadioButton2))
                         .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnSignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
         pnlSignUpLayout.setVerticalGroup(
             pnlSignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -615,7 +615,6 @@ public class Login extends javax.swing.JFrame {
     private void btnSignInEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInEmpActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(null, "Berhasil Login");
-        System.exit(0);
         setVisible(false);
         MainEmployee main = new MainEmployee();
         main.setVisible(true);
