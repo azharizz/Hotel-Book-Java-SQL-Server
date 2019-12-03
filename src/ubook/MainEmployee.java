@@ -54,6 +54,8 @@ public class MainEmployee extends javax.swing.JFrame {
         pnlStatus = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        btnBook = new javax.swing.JButton();
+        btnBook1 = new javax.swing.JButton();
         pnlFinancial = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
@@ -112,7 +114,7 @@ public class MainEmployee extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Status Transaction");
+        jLabel2.setText("Transaction Monitor");
 
         jLabel6.setIcon(new javax.swing.ImageIcon("C:\\BasisData\\icon\\outline_check_box_white_18dp.png")); // NOI18N
 
@@ -125,7 +127,7 @@ public class MainEmployee extends javax.swing.JFrame {
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel2)
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         sdbrStatusLayout.setVerticalGroup(
             sdbrStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,7 +272,7 @@ public class MainEmployee extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "ID Pesanan", "No. KTP", "Jumlah Tagihan", "Status"
+                "ID Pesanan", "No. KTP", "Jumlah Transfer", "Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -283,17 +285,34 @@ public class MainEmployee extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable2);
 
+        btnBook.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnBook.setText("Batalkan");
+        btnBook.setPreferredSize(new java.awt.Dimension(84, 25));
+
+        btnBook1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnBook1.setText("Terima");
+
         javax.swing.GroupLayout pnlStatusLayout = new javax.swing.GroupLayout(pnlStatus);
         pnlStatus.setLayout(pnlStatusLayout);
         pnlStatusLayout.setHorizontalGroup(
             pnlStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE)
+            .addGroup(pnlStatusLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnBook1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
         pnlStatusLayout.setVerticalGroup(
             pnlStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlStatusLayout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 101, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(pnlStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnBook1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28))
         );
 
         pnlMainEmp.add(pnlStatus, "card3");
@@ -306,7 +325,7 @@ public class MainEmployee extends javax.swing.JFrame {
                 {null, null, null}
             },
             new String [] {
-                "ID Pesanan", "Tangal Check In", "Jumlah Tagihan"
+                "ID Pesanan", "Tangal Check In", "Jumlah Pendapatan"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -463,6 +482,8 @@ public class MainEmployee extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBook;
+    private javax.swing.JButton btnBook1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

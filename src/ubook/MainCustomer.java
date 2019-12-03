@@ -40,15 +40,21 @@ public class MainCustomer extends javax.swing.JFrame {
 
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String url = "jdbc:sqlserver://localhost:1433;databaseName=BasDat092;user=acer;password=123456";
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=UBOOK;user=acer;password=123456";
             Connection con = DriverManager.getConnection(url);
-            String query1 = "Select * from Hotel";
+            String query1 = "Select * from HOTEL, HOTEL_ALAMAT";
+//            String query2 = "select * from HOTEL_ALAMAT";
             Statement st = con.createStatement();
+//            Statement st2 = con.createStatement();
             ResultSet rs = st.executeQuery(query1);
+//            ResultSet rs2 = st2.executeQuery(query2);
+            
             Hotel hotel;
             while (rs.next()) {
 //                hotel = new Hotel(rs.getString("idHotel"), rs.getString("nama"), rs.getFloat("harga"), rs.getString("alamat"),rs.getBytes("image"));
-                hotel = new Hotel(rs.getString("idHotel"), rs.getString("nama"), rs.getString("alamat"), rs.getFloat("harga"), rs.getString("kuota"), rs.getBytes("gambar"), rs.getString("deskripsi"));
+                hotel = new Hotel(rs.getString("ID_HOTEL"), rs.getString("NAMA_HOTEL"), rs.getInt("HARGA_HOTEL"), rs.getInt("KUOTA"),
+                        rs.getString("EMAIL"), rs.getBytes("GAMBAR"), rs.getString("DESKRIPSI"), rs.getInt("NOREKHOTE"),rs.getString("ALAMAT_HOTAEL"));
+                
                 hotelList.add(hotel);
             }
         } catch (Exception e) {
@@ -664,12 +670,12 @@ public class MainCustomer extends javax.swing.JFrame {
     private void HotelTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HotelTableMouseClicked
         // TODO add your handling code here:
         int i = HotelTable.getSelectedRow();
-        TableModel model=HotelTable.getModel();
+        TableModel model = HotelTable.getModel();
         txtDisplayID.setText(model.getValueAt(i, 0).toString());
         txtDisplayNama.setText(model.getValueAt(i, 1).toString());
         txtDisplayAlamat.setText(model.getValueAt(i, 2).toString());
-        txtDisplayHarga.setText("Rp. "+model.getValueAt(i, 3).toString());
-        String desk=hotelList().get(i).getDeskripsi();
+        txtDisplayHarga.setText("Rp. " + model.getValueAt(i, 3).toString());
+        String desk = hotelList().get(i).getDeskripsi();
         txtDisplayDeskripsi.setText(desk);
 //        byte[] img=(hotelList().get(i).getPicture());
 //        ImageIcon imageIcon=new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(imgHotel.getWidth(), imgHotel.getHeight(), Image.SCALE_SMOOTH));
