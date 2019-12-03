@@ -8,7 +8,15 @@ package ubook;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -21,9 +29,50 @@ public class MainCustomer extends javax.swing.JFrame {
      */
     public MainCustomer() {
         initComponents();
+        showUser();
         Toolkit toolkit = getToolkit();
         Dimension size = toolkit.getScreenSize();
         setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
+    }
+
+    public ArrayList<Hotel> hotelList() {
+        ArrayList<Hotel> hotelList = new ArrayList<>();
+
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=BasDat092;user=acer;password=123456";
+            Connection con = DriverManager.getConnection(url);
+            String query1 = "Select * from Hotel";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query1);
+            Hotel hotel;
+            while (rs.next()) {
+//                hotel = new Hotel(rs.getString("idHotel"), rs.getString("nama"), rs.getFloat("harga"), rs.getString("alamat"),rs.getBytes("image"));
+                hotel = new Hotel(rs.getString("idHotel"), rs.getString("nama"), rs.getString("alamat"), rs.getFloat("harga"), rs.getString("kuota"), rs.getBytes("gambar"), rs.getString("deskripsi"));
+                hotelList.add(hotel);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return hotelList;
+    }
+
+    public void showUser() {
+        ArrayList<Hotel> list = hotelList();
+        DefaultTableModel model = (DefaultTableModel) HotelTable.getModel();
+        Object[] row = new Object[5];
+        for (int i = 0; i < list.size(); i++) {
+            row[0] = list.get(i).getId();
+            row[1] = list.get(i).getNama();
+            row[2] = list.get(i).getAlamat();
+            row[3] = list.get(i).getHarga();
+            row[4] = list.get(i).getKuota();
+            try {
+
+            } catch (Exception e) {
+            }
+            model.addRow(row);
+        }
     }
 
     /**
@@ -51,17 +100,18 @@ public class MainCustomer extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         pnlMain = new javax.swing.JPanel();
         pnlHotelBook = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
+        txtDisplayID = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
+        txtDisplayHarga = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         HotelTable = new javax.swing.JTable();
         btnBook = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        txtDisplayDeskripsi = new javax.swing.JTextArea();
+        txtDisplayAlamat = new javax.swing.JLabel();
+        txtDisplayNama = new javax.swing.JLabel();
+        imgHotel = new javax.swing.JLabel();
+        btnFavorite = new javax.swing.JButton();
         pnlFavorite = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -245,23 +295,22 @@ public class MainCustomer extends javax.swing.JFrame {
         pnlMain.setBackground(new java.awt.Color(255, 255, 255));
         pnlMain.setLayout(new java.awt.CardLayout());
 
-        jLabel10.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel10.setText("AB1234");
-        jLabel10.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        txtDisplayID.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtDisplayID.setText("AB1234");
+        txtDisplayID.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel13.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jLabel13.setText("Alamat :");
 
-        jLabel14.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel14.setText("Rp. 100.000");
-        jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        txtDisplayHarga.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtDisplayHarga.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        txtDisplayHarga.setText("Rp. 100.000");
+        txtDisplayHarga.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jScrollPane1.setBackground(new java.awt.Color(192, 108, 132));
         jScrollPane1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
 
         HotelTable.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        HotelTable.setForeground(new java.awt.Color(255, 255, 255));
         HotelTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -279,6 +328,11 @@ public class MainCustomer extends javax.swing.JFrame {
             }
         });
         HotelTable.setGridColor(new java.awt.Color(192, 108, 132));
+        HotelTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                HotelTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(HotelTable);
 
         btnBook.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
@@ -289,22 +343,25 @@ public class MainCustomer extends javax.swing.JFrame {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Deskripsi");
-        jScrollPane2.setViewportView(jTextArea1);
+        txtDisplayDeskripsi.setColumns(20);
+        txtDisplayDeskripsi.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtDisplayDeskripsi.setRows(5);
+        txtDisplayDeskripsi.setText("Deskripsi");
+        jScrollPane2.setViewportView(txtDisplayDeskripsi);
 
-        jLabel12.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel12.setText("Jalan Suhat");
+        txtDisplayAlamat.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txtDisplayAlamat.setText("Jalan Suhat");
 
-        jLabel9.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel9.setText("Nama Hotel");
+        txtDisplayNama.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        txtDisplayNama.setText("Nama Hotel");
 
-        jLabel11.setBackground(new java.awt.Color(0, 51, 51));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("NO IMAGE");
-        jLabel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        imgHotel.setBackground(new java.awt.Color(0, 51, 51));
+        imgHotel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imgHotel.setText("NO IMAGE");
+        imgHotel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        btnFavorite.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnFavorite.setText("Favorite");
 
         javax.swing.GroupLayout pnlHotelBookLayout = new javax.swing.GroupLayout(pnlHotelBook);
         pnlHotelBook.setLayout(pnlHotelBookLayout);
@@ -314,24 +371,26 @@ public class MainCustomer extends javax.swing.JFrame {
             .addGroup(pnlHotelBookLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
                     .addGroup(pnlHotelBookLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(191, 191, 191)
-                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(imgHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDisplayNama))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addGroup(pnlHotelBookLayout.createSequentialGroup()
+                                .addComponent(txtDisplayID)
+                                .addGap(191, 191, 191)
+                                .addComponent(txtDisplayHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlHotelBookLayout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDisplayAlamat))))
                     .addGroup(pnlHotelBookLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel12)))
+                        .addComponent(btnFavorite, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(pnlHotelBookLayout.createSequentialGroup()
-                .addGap(203, 203, 203)
-                .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlHotelBookLayout.setVerticalGroup(
             pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -339,21 +398,24 @@ public class MainCustomer extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel14)
-                    .addComponent(jLabel9))
+                    .addComponent(txtDisplayID)
+                    .addComponent(txtDisplayHarga)
+                    .addComponent(txtDisplayNama))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlHotelBookLayout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(jLabel13))
-                        .addGap(14, 14, 14)
-                        .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(13, 13, 13))
+                            .addComponent(txtDisplayAlamat)
+                            .addComponent(jLabel13)))
+                    .addGroup(pnlHotelBookLayout.createSequentialGroup()
+                        .addComponent(imgHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(pnlHotelBookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnFavorite, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBook, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
 
         pnlMain.add(pnlHotelBook, "card2");
@@ -541,7 +603,7 @@ public class MainCustomer extends javax.swing.JFrame {
         sdbrFavorite.setBackground(new java.awt.Color(108, 91, 123));
         sdbrChart.setBackground(new java.awt.Color(108, 91, 123));
         sdbrProfil.setBackground(new java.awt.Color(108, 91, 123));
-        
+
         pnlMain.removeAll();
         pnlMain.add(pnlHotelBook);
         pnlMain.repaint();
@@ -567,7 +629,7 @@ public class MainCustomer extends javax.swing.JFrame {
         sdbrFavorite.setBackground(new java.awt.Color(108, 91, 123));
         sdbrChart.setBackground(new java.awt.Color(192, 108, 132));
         sdbrProfil.setBackground(new java.awt.Color(108, 91, 123));
-        
+
         pnlMain.removeAll();
         pnlMain.add(pnlCart);
         pnlMain.repaint();
@@ -580,7 +642,7 @@ public class MainCustomer extends javax.swing.JFrame {
         sdbrFavorite.setBackground(new java.awt.Color(108, 91, 123));
         sdbrChart.setBackground(new java.awt.Color(108, 91, 123));
         sdbrProfil.setBackground(new java.awt.Color(192, 108, 132));
-        
+
         pnlMain.removeAll();
         pnlMain.add(pnlProfileCus);
         pnlMain.repaint();
@@ -598,6 +660,22 @@ public class MainCustomer extends javax.swing.JFrame {
     private void btnBook1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBook1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBook1ActionPerformed
+
+    private void HotelTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HotelTableMouseClicked
+        // TODO add your handling code here:
+        int i = HotelTable.getSelectedRow();
+        TableModel model=HotelTable.getModel();
+        txtDisplayID.setText(model.getValueAt(i, 0).toString());
+        txtDisplayNama.setText(model.getValueAt(i, 1).toString());
+        txtDisplayAlamat.setText(model.getValueAt(i, 2).toString());
+        txtDisplayHarga.setText("Rp. "+model.getValueAt(i, 3).toString());
+        String desk=hotelList().get(i).getDeskripsi();
+        txtDisplayDeskripsi.setText(desk);
+//        byte[] img=(hotelList().get(i).getPicture());
+//        ImageIcon imageIcon=new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(imgHotel.getWidth(), imgHotel.getHeight(), Image.SCALE_SMOOTH));
+//        imgHotel.setIcon(imageIcon);
+
+    }//GEN-LAST:event_HotelTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -640,12 +718,10 @@ public class MainCustomer extends javax.swing.JFrame {
     private javax.swing.JTable HotelTable2;
     private javax.swing.JButton btnBook;
     private javax.swing.JButton btnBook1;
+    private javax.swing.JButton btnFavorite;
+    private javax.swing.JLabel imgHotel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
@@ -661,14 +737,12 @@ public class MainCustomer extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JPanel pnlCart;
     private javax.swing.JPanel pnlFavorite;
     private javax.swing.JPanel pnlHotelBook;
@@ -679,5 +753,10 @@ public class MainCustomer extends javax.swing.JFrame {
     private javax.swing.JPanel sdbrFavorite;
     private javax.swing.JPanel sdbrHotel;
     private javax.swing.JPanel sdbrProfil;
+    private javax.swing.JLabel txtDisplayAlamat;
+    private javax.swing.JTextArea txtDisplayDeskripsi;
+    private javax.swing.JLabel txtDisplayHarga;
+    private javax.swing.JLabel txtDisplayID;
+    private javax.swing.JLabel txtDisplayNama;
     // End of variables declaration//GEN-END:variables
 }
