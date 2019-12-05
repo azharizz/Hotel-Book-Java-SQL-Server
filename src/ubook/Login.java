@@ -73,9 +73,9 @@ public class Login extends javax.swing.JFrame {
         pnlLoginEmp = new javax.swing.JPanel();
         jLabel17 = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        fieldUsernameEmp = new javax.swing.JTextField();
+        txtLoginUsernameEmp = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
-        fieldPasswordEmp = new javax.swing.JPasswordField();
+        txtLoginPasswordEmp = new javax.swing.JPasswordField();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         btnSignInEmp = new javax.swing.JButton();
@@ -286,21 +286,21 @@ public class Login extends javax.swing.JFrame {
 
         jLabel18.setIcon(new javax.swing.ImageIcon("C:\\BasisData\\icon\\outline_person_white_18dp.png")); // NOI18N
 
-        fieldUsernameEmp.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        fieldUsernameEmp.setText("Masukkan Username / Email");
-        fieldUsernameEmp.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtLoginUsernameEmp.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtLoginUsernameEmp.setText("Masukkan Username / Email");
+        txtLoginUsernameEmp.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                fieldUsernameEmpFocusGained(evt);
+                txtLoginUsernameEmpFocusGained(evt);
             }
         });
 
         jLabel19.setIcon(new javax.swing.ImageIcon("C:\\BasisData\\icon\\outline_lock_white_18dp.png")); // NOI18N
 
-        fieldPasswordEmp.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        fieldPasswordEmp.setText("jPasswordField1");
-        fieldPasswordEmp.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtLoginPasswordEmp.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        txtLoginPasswordEmp.setText("jPasswordField1");
+        txtLoginPasswordEmp.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                fieldPasswordEmpFocusGained(evt);
+                txtLoginPasswordEmpFocusGained(evt);
             }
         });
 
@@ -332,13 +332,13 @@ public class Login extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlLoginEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel21)
-                            .addComponent(fieldUsernameEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtLoginUsernameEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginEmpLayout.createSequentialGroup()
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(pnlLoginEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel20)
-                            .addComponent(fieldPasswordEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLoginPasswordEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSignInEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlLoginEmpLayout.createSequentialGroup()
                         .addComponent(jLabel17)
@@ -354,13 +354,13 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlLoginEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(fieldUsernameEmp)
+                    .addComponent(txtLoginUsernameEmp)
                     .addComponent(jLabel18))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlLoginEmpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fieldPasswordEmp)
+                    .addComponent(txtLoginPasswordEmp)
                     .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(26, 26, 26)
                 .addComponent(btnSignInEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -595,13 +595,13 @@ public class Login extends javax.swing.JFrame {
             pst.setString(6, signUpPassword.getText());
             pst.setString(7, signUpNoTelp.getText());
             pst.executeUpdate();
-            
-            String query2="insert into CUSTOMER_ALAMAT(ALAMAT,NO_KTP) values(?,?)";
-            PreparedStatement pst2=con.prepareStatement(query2);
-            pst.setString(1, signUpAlamat.getText());
-            pst.setString(2, signUpKTP.getText());
-            
-            
+
+            String query2 = "insert into CUSTOMER_ALAMAT(ALAMAT,NO_KTP) values(?,?)";
+            PreparedStatement pst2 = con.prepareStatement(query2);
+            pst2.setString(1, signUpAlamat.getText());
+            pst2.setString(2, signUpKTP.getText());
+            pst2.executeUpdate();
+
             JOptionPane.showMessageDialog(null, "Berhasil Mendaftarkan");
 
 //            Statement st = con.createStatement();
@@ -630,20 +630,20 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtFieldPasswordCusFocusGained
 
-    private void fieldUsernameEmpFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldUsernameEmpFocusGained
+    private void txtLoginUsernameEmpFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLoginUsernameEmpFocusGained
         // TODO add your handling code here:
-        if (fieldUsernameEmp.getText().trim().equals("Masukkan Username / Email")) {
-            fieldUsernameEmp.setText("");
+        if (txtLoginUsernameEmp.getText().trim().equals("Masukkan Username / Email")) {
+            txtLoginUsernameEmp.setText("");
         }
-    }//GEN-LAST:event_fieldUsernameEmpFocusGained
+    }//GEN-LAST:event_txtLoginUsernameEmpFocusGained
 
-    private void fieldPasswordEmpFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fieldPasswordEmpFocusGained
+    private void txtLoginPasswordEmpFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLoginPasswordEmpFocusGained
         // TODO add your handling code here:
-        String myPass = String.valueOf(fieldPasswordEmp.getPassword());
+        String myPass = String.valueOf(txtLoginPasswordEmp.getPassword());
         if (myPass.equals("jPasswordField1")) {
-            fieldPasswordEmp.setText("");
+            txtLoginPasswordEmp.setText("");
         }
-    }//GEN-LAST:event_fieldPasswordEmpFocusGained
+    }//GEN-LAST:event_txtLoginPasswordEmpFocusGained
 
     private void btnLoginSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginSelectActionPerformed
         // TODO add your handling code here:
@@ -667,18 +667,23 @@ public class Login extends javax.swing.JFrame {
     private void btnSignInCusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInCusActionPerformed
         // TODO add your handling code here:
         try {
-//            Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String url = "jdbc:sqlserver://localhost:1433;databaseName=UBOOK;user=acer;password=123456";
             Connection con = DriverManager.getConnection(url);
             String sql = "select * from Customer where email=? and password=?";
             PreparedStatement pst = con.prepareStatement(sql);
+            String email = txtFieldUsernameCus.getText();
             pst.setString(1, txtFieldUsernameCus.getText());
             pst.setString(2, txtFieldPasswordCus.getText());
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
                 JOptionPane.showMessageDialog(null, "Username and Password Matched");
-                MainCustomer mainCustomer = new MainCustomer();
+                String query2 = "Select NO_KTP from CUSTOMER where email=\'" + email + "\'";
+                Statement st2 = con.createStatement();
+                ResultSet r2 = st2.executeQuery(query2);
+                String noKtp = rs.getString("NO_KTP");
+                System.out.println(noKtp);
+                MainCustomer mainCustomer = new MainCustomer(noKtp);
                 mainCustomer.setVisible(true);
                 setVisible(false);
             } else {
@@ -689,18 +694,37 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, e);
         }
 
-//        JOptionPane.showMessageDialog(null, "Berhasil Login");
-//        setVisible(false);
-//        MainCustomer main = new MainCustomer();
-//        main.setVisible(true);
     }//GEN-LAST:event_btnSignInCusActionPerformed
 
     private void btnSignInEmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignInEmpActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null, "Berhasil Login");
-        setVisible(false);
-        MainEmployee main = new MainEmployee();
-        main.setVisible(true);
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=UBOOK;user=acer;password=123456";
+            Connection con = DriverManager.getConnection(url);
+            String sql = "select * from Admin where ID_ADMIN=? and password=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            String id = txtLoginUsernameEmp.getText();
+            pst.setString(1, id);
+            pst.setString(2, txtLoginPasswordEmp.getText());
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(null, "Username and Password Matched");
+//                String query2 = "Select NO_KTP from CUSTOMER where email=\'" + email + "\'";
+//                Statement st2 = con.createStatement();
+//                ResultSet r2 = st2.executeQuery(query2);
+//                String noKtp = rs.getString("NO_KTP");
+//                System.out.println(noKtp);
+                MainEmployee main = new MainEmployee(id);
+                main.setVisible(true);
+                setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(null, "Username and Password incorrect");
+            }
+            con.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }//GEN-LAST:event_btnSignInEmpActionPerformed
 
     /**
@@ -743,8 +767,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton btnSignInCus;
     private javax.swing.JButton btnSignInEmp;
     private javax.swing.JButton btnSignUp;
-    private javax.swing.JPasswordField fieldPasswordEmp;
-    private javax.swing.JTextField fieldUsernameEmp;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -786,6 +808,8 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField signUpPassword;
     private javax.swing.JPasswordField txtFieldPasswordCus;
     private javax.swing.JTextField txtFieldUsernameCus;
+    private javax.swing.JPasswordField txtLoginPasswordEmp;
+    private javax.swing.JTextField txtLoginUsernameEmp;
     private javax.swing.JLabel txtSignUp;
     // End of variables declaration//GEN-END:variables
 }

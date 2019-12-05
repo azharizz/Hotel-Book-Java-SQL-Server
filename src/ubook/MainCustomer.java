@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -27,6 +28,18 @@ public class MainCustomer extends javax.swing.JFrame {
     /**
      * Creates new form Main
      */
+    String noKtp;
+
+    public MainCustomer(String noKtp) {
+        this.noKtp = noKtp;
+        initComponents();
+        showUser();
+        showCart();
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
+    }
+
     public MainCustomer() {
         initComponents();
         showUser();
@@ -43,24 +56,52 @@ public class MainCustomer extends javax.swing.JFrame {
             String url = "jdbc:sqlserver://localhost:1433;databaseName=UBOOK;user=acer;password=123456";
             Connection con = DriverManager.getConnection(url);
             String query1 = "Select * from HOTEL, HOTEL_ALAMAT";
-//            String query2 = "select * from HOTEL_ALAMAT";
             Statement st = con.createStatement();
-//            Statement st2 = con.createStatement();
             ResultSet rs = st.executeQuery(query1);
-//            ResultSet rs2 = st2.executeQuery(query2);
-            
+
             Hotel hotel;
             while (rs.next()) {
-//                hotel = new Hotel(rs.getString("idHotel"), rs.getString("nama"), rs.getFloat("harga"), rs.getString("alamat"),rs.getBytes("image"));
+
                 hotel = new Hotel(rs.getString("ID_HOTEL"), rs.getString("NAMA_HOTEL"), rs.getInt("HARGA_HOTEL"), rs.getInt("KUOTA"),
-                        rs.getString("EMAIL"), rs.getBytes("GAMBAR"), rs.getString("DESKRIPSI"), rs.getInt("NOREKHOTE"),rs.getString("ALAMAT_HOTAEL"));
-                
+                        rs.getString("EMAIL"), rs.getBytes("GAMBAR"), rs.getString("DESKRIPSI"), rs.getInt("NOREKHOTE"), rs.getString("ALAMAT_HOTAEL"));
+
                 hotelList.add(hotel);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(null, e);
+        } catch (ClassNotFoundException ce) {
+            ce.printStackTrace();
         }
         return hotelList;
+    }
+
+    public ArrayList<Cart> cartList() {
+        ArrayList<Cart> cartList = new ArrayList<>();
+
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=UBOOK;user=acer;password=123456";
+            Connection con = DriverManager.getConnection(url);
+            String query1 = "Select * from KERANJANG join KERANJANG_ALAMATHOTEL on KERANJANG.ID_PESANAN=KERANJANG_ALAMATHOTEL.ID_PESANAN where NO_KTP=" + noKtp;
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query1);
+
+            Cart cart;
+            while (rs.next()) {
+                cart = new Cart(rs.getString("ID_PESANAN"), rs.getString("NAMA_HOTEL"), rs.getString("ID_HOTEL"), rs.getBytes("GAMBAR"), rs.getInt("HARGA_HOTEL"),
+                        rs.getString("STATUS_TRANSAKSI"), rs.getString("TGLCHECKIN"), rs.getString("TGLCHECKOUT"), rs.getString("JENIS_KAMAR"), rs.getInt("NO_KAMAR"),
+                        rs.getInt("TOTAL_TAGIHAN"), rs.getInt("NO_KTP"), rs.getString("ALAMAT_HOTEL"));
+                
+                cartList.add(cart);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
+        } catch (ClassNotFoundException ce) {
+            ce.printStackTrace();
+        }
+        return cartList;
     }
 
     public void showUser() {
@@ -73,6 +114,24 @@ public class MainCustomer extends javax.swing.JFrame {
             row[2] = list.get(i).getAlamat();
             row[3] = list.get(i).getHarga();
             row[4] = list.get(i).getKuota();
+            try {
+
+            } catch (Exception e) {
+            }
+            model.addRow(row);
+        }
+    }
+
+    public void showCart() {
+        ArrayList<Cart> list = cartList();
+        DefaultTableModel model = (DefaultTableModel) tblCart.getModel();
+        Object[] row = new Object[5];
+        for (int i = 0; i < list.size(); i++) {
+            row[0] = list.get(i).getIdPesanan();
+            row[1] = list.get(i).getNama();
+            row[2] = list.get(i).getAlamat();
+            row[3] = list.get(i).getTotal();
+            row[4] = list.get(i).getStatus();
             try {
 
             } catch (Exception e) {
@@ -98,12 +157,13 @@ public class MainCustomer extends javax.swing.JFrame {
         sdbrFavorite = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        sdbrChart = new javax.swing.JPanel();
+        sdbrCart = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         sdbrProfil = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        btnSignOutCus = new javax.swing.JButton();
         pnlMain = new javax.swing.JPanel();
         pnlHotelBook = new javax.swing.JPanel();
         txtDisplayID = new javax.swing.JLabel();
@@ -122,17 +182,17 @@ public class MainCustomer extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         pnlCart = new javax.swing.JPanel();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
+        cartIDPesanan = new javax.swing.JLabel();
+        cartAlamat = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        HotelTable2 = new javax.swing.JTable();
+        tblCart = new javax.swing.JTable();
         btnBook1 = new javax.swing.JButton();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        jLabel29 = new javax.swing.JLabel();
-        jLabel30 = new javax.swing.JLabel();
+        cartNama = new javax.swing.JLabel();
+        imgCart = new javax.swing.JLabel();
+        cartCheckIn = new javax.swing.JLabel();
+        cartCheckOut = new javax.swing.JLabel();
+        cartJenis = new javax.swing.JLabel();
+        cartTotal = new javax.swing.JLabel();
         pnlProfileCus = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -208,11 +268,11 @@ public class MainCustomer extends javax.swing.JFrame {
             .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        sdbrChart.setBackground(new java.awt.Color(108, 91, 123));
-        sdbrChart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        sdbrChart.addMouseListener(new java.awt.event.MouseAdapter() {
+        sdbrCart.setBackground(new java.awt.Color(108, 91, 123));
+        sdbrCart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        sdbrCart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                sdbrChartMouseClicked(evt);
+                sdbrCartMouseClicked(evt);
             }
         });
 
@@ -222,19 +282,19 @@ public class MainCustomer extends javax.swing.JFrame {
 
         jLabel7.setIcon(new javax.swing.ImageIcon("C:\\BasisData\\icon\\outline_shopping_cart_white_18dp.png")); // NOI18N
 
-        javax.swing.GroupLayout sdbrChartLayout = new javax.swing.GroupLayout(sdbrChart);
-        sdbrChart.setLayout(sdbrChartLayout);
-        sdbrChartLayout.setHorizontalGroup(
-            sdbrChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sdbrChartLayout.createSequentialGroup()
+        javax.swing.GroupLayout sdbrCartLayout = new javax.swing.GroupLayout(sdbrCart);
+        sdbrCart.setLayout(sdbrCartLayout);
+        sdbrCartLayout.setHorizontalGroup(
+            sdbrCartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(sdbrCartLayout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addContainerGap(160, Short.MAX_VALUE))
         );
-        sdbrChartLayout.setVerticalGroup(
-            sdbrChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        sdbrCartLayout.setVerticalGroup(
+            sdbrCartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
@@ -273,14 +333,26 @@ public class MainCustomer extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        btnSignOutCus.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnSignOutCus.setText("Sign Out");
+        btnSignOutCus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignOutCusActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlSideBarCusLayout = new javax.swing.GroupLayout(pnlSideBarCus);
         pnlSideBarCus.setLayout(pnlSideBarCusLayout);
         pnlSideBarCusLayout.setHorizontalGroup(
             pnlSideBarCusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sdbrChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(sdbrCart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(sdbrFavorite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(sdbrProfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(sdbrHotel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSideBarCusLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSignOutCus, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(93, 93, 93))
         );
         pnlSideBarCusLayout.setVerticalGroup(
             pnlSideBarCusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,10 +362,12 @@ public class MainCustomer extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(sdbrFavorite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(sdbrChart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sdbrCart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(sdbrProfil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(100, 100, 100))
+                .addGap(47, 47, 47)
+                .addComponent(btnSignOutCus, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jSplitPane1.setLeftComponent(pnlSideBarCus);
@@ -462,19 +536,18 @@ public class MainCustomer extends javax.swing.JFrame {
 
         pnlMain.add(pnlFavorite, "card3");
 
-        jLabel21.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel21.setText("ID Pesanan             :");
-        jLabel21.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        cartIDPesanan.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        cartIDPesanan.setText("ID Pesanan             :");
+        cartIDPesanan.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jLabel22.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel22.setText("Alamat                     :");
+        cartAlamat.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        cartAlamat.setText("Alamat                     :");
 
         jScrollPane3.setBackground(new java.awt.Color(192, 108, 132));
         jScrollPane3.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
 
-        HotelTable2.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-        HotelTable2.setForeground(new java.awt.Color(255, 255, 255));
-        HotelTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblCart.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        tblCart.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -490,36 +563,41 @@ public class MainCustomer extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        HotelTable2.setGridColor(new java.awt.Color(192, 108, 132));
-        jScrollPane3.setViewportView(HotelTable2);
+        tblCart.setGridColor(new java.awt.Color(192, 108, 132));
+        tblCart.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCartMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tblCart);
 
         btnBook1.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        btnBook1.setText("Bayar");
+        btnBook1.setText("Bayar / Invoice");
         btnBook1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBook1ActionPerformed(evt);
             }
         });
 
-        jLabel25.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
-        jLabel25.setText("Nama Hotel");
+        cartNama.setFont(new java.awt.Font("SansSerif", 1, 16)); // NOI18N
+        cartNama.setText("Nama Hotel");
 
-        jLabel26.setBackground(new java.awt.Color(0, 51, 51));
-        jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel26.setText("NO IMAGE");
-        jLabel26.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        imgCart.setBackground(new java.awt.Color(0, 51, 51));
+        imgCart.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        imgCart.setText("NO IMAGE");
+        imgCart.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel27.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel27.setText("Tanggal Check In    :");
+        cartCheckIn.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        cartCheckIn.setText("Tanggal Check In    :");
 
-        jLabel28.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel28.setText("Tanggal Check Out :");
+        cartCheckOut.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        cartCheckOut.setText("Tanggal Check Out :");
 
-        jLabel29.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel29.setText("Jenis Kamar            :");
+        cartJenis.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        cartJenis.setText("Jenis Kamar            :");
 
-        jLabel30.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        jLabel30.setText("Total Tagihan          :");
+        cartTotal.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        cartTotal.setText("Total Tagihan          :");
 
         javax.swing.GroupLayout pnlCartLayout = new javax.swing.GroupLayout(pnlCart);
         pnlCart.setLayout(pnlCartLayout);
@@ -529,21 +607,21 @@ public class MainCustomer extends javax.swing.JFrame {
             .addGroup(pnlCartLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlCartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel25))
+                    .addComponent(imgCart, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cartNama))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(pnlCartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel28)
+                    .addComponent(cartCheckOut)
                     .addGroup(pnlCartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel27, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel29)
-                    .addComponent(jLabel22)
-                    .addComponent(jLabel30))
+                        .addComponent(cartIDPesanan, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cartCheckIn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cartJenis)
+                    .addComponent(cartAlamat)
+                    .addComponent(cartTotal))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCartLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnBook1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnBook1)
                 .addContainerGap())
         );
         pnlCartLayout.setVerticalGroup(
@@ -551,22 +629,22 @@ public class MainCustomer extends javax.swing.JFrame {
             .addGroup(pnlCartLayout.createSequentialGroup()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel25)
+                .addComponent(cartNama)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlCartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlCartLayout.createSequentialGroup()
-                        .addComponent(jLabel21)
+                        .addComponent(cartIDPesanan)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel27)
+                        .addComponent(cartCheckIn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel28)
+                        .addComponent(cartCheckOut)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel29)
+                        .addComponent(cartJenis)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel22)
+                        .addComponent(cartAlamat)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel30))
-                    .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cartTotal))
+                    .addComponent(imgCart, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(7, 7, 7)
                 .addComponent(btnBook1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -607,7 +685,7 @@ public class MainCustomer extends javax.swing.JFrame {
         // TODO add your handling code here:
         sdbrHotel.setBackground(new java.awt.Color(192, 108, 132));
         sdbrFavorite.setBackground(new java.awt.Color(108, 91, 123));
-        sdbrChart.setBackground(new java.awt.Color(108, 91, 123));
+        sdbrCart.setBackground(new java.awt.Color(108, 91, 123));
         sdbrProfil.setBackground(new java.awt.Color(108, 91, 123));
 
         pnlMain.removeAll();
@@ -620,7 +698,7 @@ public class MainCustomer extends javax.swing.JFrame {
         // TODO add your handling code here:
         sdbrHotel.setBackground(new java.awt.Color(108, 91, 123));
         sdbrFavorite.setBackground(new java.awt.Color(192, 108, 132));
-        sdbrChart.setBackground(new java.awt.Color(108, 91, 123));
+        sdbrCart.setBackground(new java.awt.Color(108, 91, 123));
         sdbrProfil.setBackground(new java.awt.Color(108, 91, 123));
 
         pnlMain.removeAll();
@@ -629,24 +707,24 @@ public class MainCustomer extends javax.swing.JFrame {
         pnlMain.revalidate();
     }//GEN-LAST:event_sdbrFavoriteMouseClicked
 
-    private void sdbrChartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sdbrChartMouseClicked
+    private void sdbrCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sdbrCartMouseClicked
         // TODO add your handling code here:
         sdbrHotel.setBackground(new java.awt.Color(108, 91, 123));
         sdbrFavorite.setBackground(new java.awt.Color(108, 91, 123));
-        sdbrChart.setBackground(new java.awt.Color(192, 108, 132));
+        sdbrCart.setBackground(new java.awt.Color(192, 108, 132));
         sdbrProfil.setBackground(new java.awt.Color(108, 91, 123));
 
         pnlMain.removeAll();
         pnlMain.add(pnlCart);
         pnlMain.repaint();
         pnlMain.revalidate();
-    }//GEN-LAST:event_sdbrChartMouseClicked
+    }//GEN-LAST:event_sdbrCartMouseClicked
 
     private void sdbrProfilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sdbrProfilMouseClicked
         // TODO add your handling code here:
         sdbrHotel.setBackground(new java.awt.Color(108, 91, 123));
         sdbrFavorite.setBackground(new java.awt.Color(108, 91, 123));
-        sdbrChart.setBackground(new java.awt.Color(108, 91, 123));
+        sdbrCart.setBackground(new java.awt.Color(108, 91, 123));
         sdbrProfil.setBackground(new java.awt.Color(192, 108, 132));
 
         pnlMain.removeAll();
@@ -658,13 +736,18 @@ public class MainCustomer extends javax.swing.JFrame {
     private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
         // TODO add your handling code here:
 //        setVisible(false);
-        DatePicker date = new DatePicker();
+        int i = HotelTable.getSelectedRow();
+        TableModel model = HotelTable.getModel();
+        String id = (model.getValueAt(i, 0).toString());
+        DatePicker date = new DatePicker(id, noKtp);
         date.setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_btnBookActionPerformed
 
     private void btnBook1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBook1ActionPerformed
         // TODO add your handling code here:
+        Invoice invoice = new Invoice();
+        invoice.setVisible(true);
     }//GEN-LAST:event_btnBook1ActionPerformed
 
     private void HotelTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HotelTableMouseClicked
@@ -677,11 +760,32 @@ public class MainCustomer extends javax.swing.JFrame {
         txtDisplayHarga.setText("Rp. " + model.getValueAt(i, 3).toString());
         String desk = hotelList().get(i).getDeskripsi();
         txtDisplayDeskripsi.setText(desk);
-//        byte[] img=(hotelList().get(i).getPicture());
-//        ImageIcon imageIcon=new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(imgHotel.getWidth(), imgHotel.getHeight(), Image.SCALE_SMOOTH));
-//        imgHotel.setIcon(imageIcon);
+        byte[] img=(hotelList().get(i).getGambar());
+        ImageIcon imageIcon=new ImageIcon(new ImageIcon(img).getImage().getScaledInstance(imgHotel.getWidth(), imgHotel.getHeight(), Image.SCALE_SMOOTH));
+        imgHotel.setIcon(imageIcon);
 
     }//GEN-LAST:event_HotelTableMouseClicked
+
+    private void tblCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCartMouseClicked
+        // TODO add your handling code here:
+        int i = tblCart.getSelectedRow();
+        TableModel model = tblCart.getModel();
+
+        cartIDPesanan.setText("ID Pesanan             :" + model.getValueAt(i, 0).toString());
+        cartNama.setText(model.getValueAt(i, 1).toString());
+        cartCheckIn.setText("Tanggal Check In    :" + cartList().get(i).getCheckIn());
+        cartCheckOut.setText("Tanggal Check Out :" + cartList().get(i).getCheckOut());
+        cartJenis.setText("Jenis Kamar            :" + cartList().get(i).getJenis());
+        cartAlamat.setText("Alamat                    :" + model.getValueAt(i, 2).toString());
+        cartTotal.setText("Total Tagihan          :" + model.getValueAt(i, 3).toString());
+    }//GEN-LAST:event_tblCartMouseClicked
+
+    private void btnSignOutCusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignOutCusActionPerformed
+        // TODO add your handling code here:
+        Login login=new Login();
+        login.setVisible(true);
+        setVisible(false);
+    }//GEN-LAST:event_btnSignOutCusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -721,23 +825,23 @@ public class MainCustomer extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable HotelTable;
-    private javax.swing.JTable HotelTable2;
     private javax.swing.JButton btnBook;
     private javax.swing.JButton btnBook1;
     private javax.swing.JButton btnFavorite;
+    private javax.swing.JButton btnSignOutCus;
+    private javax.swing.JLabel cartAlamat;
+    private javax.swing.JLabel cartCheckIn;
+    private javax.swing.JLabel cartCheckOut;
+    private javax.swing.JLabel cartIDPesanan;
+    private javax.swing.JLabel cartJenis;
+    private javax.swing.JLabel cartNama;
+    private javax.swing.JLabel cartTotal;
+    private javax.swing.JLabel imgCart;
     private javax.swing.JLabel imgHotel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -755,10 +859,11 @@ public class MainCustomer extends javax.swing.JFrame {
     private javax.swing.JPanel pnlMain;
     private javax.swing.JPanel pnlProfileCus;
     private javax.swing.JPanel pnlSideBarCus;
-    private javax.swing.JPanel sdbrChart;
+    private javax.swing.JPanel sdbrCart;
     private javax.swing.JPanel sdbrFavorite;
     private javax.swing.JPanel sdbrHotel;
     private javax.swing.JPanel sdbrProfil;
+    private javax.swing.JTable tblCart;
     private javax.swing.JLabel txtDisplayAlamat;
     private javax.swing.JTextArea txtDisplayDeskripsi;
     private javax.swing.JLabel txtDisplayHarga;

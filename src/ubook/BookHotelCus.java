@@ -7,6 +7,16 @@ package ubook;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -17,6 +27,8 @@ public class BookHotelCus extends javax.swing.JFrame {
     public String tglCheckIn;
     public String tglCheckOut;
     public int hari;
+    public String id;
+    public String noKtp;
 
     /**
      * Creates new form BookHotelCus
@@ -28,18 +40,64 @@ public class BookHotelCus extends javax.swing.JFrame {
         setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
     }
     
-    public BookHotelCus(String tglCheckIn, String tglCheckOut, int hari) {
+    public BookHotelCus(String tglCheckIn, String tglCheckOut, int hari, String id, String noKtp) {
         this.tglCheckIn = tglCheckIn;
         this.tglCheckOut = tglCheckOut;
         this.hari = hari;
+        this.id = id;
+        this.noKtp = noKtp;
+        System.out.println(id);
         
         initComponents();
+        showUserKamar();
         Toolkit toolkit = getToolkit();
         Dimension size = toolkit.getScreenSize();
         setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
         txtCheckIn.setText("Tanggal Check In              :" + tglCheckIn);
         txtCheckOut.setText("Tanggal Check Out           :" + tglCheckOut);
         txtTotalHari.setText("Jumlah Pemesanan Hari  :" + hari);
+    }
+    
+    public ArrayList<Kamar> kamarList() {
+        ArrayList<Kamar> kamarList = new ArrayList<>();
+        
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=UBOOK;user=acer;password=123456";
+            Connection con = DriverManager.getConnection(url);
+            String query1 = "Select * from KAMAR join KAMAR_FASILITAS on kamar.NO_KAMAR=KAMAR_FASILITAS.NO_KAMAR where ID_Hotel=\'" + id + "\'";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query1);
+            
+            Kamar kamar;
+            while (rs.next()) {
+                
+                kamar = new Kamar(rs.getInt("NO_KAMAR"), rs.getString("JENIS_KAMAR"), rs.getInt("HARGA"), rs.getInt("KUOTA"),
+                        rs.getString("ID_Hotel"), rs.getString("FASILITAS"));
+                
+                kamarList.add(kamar);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return kamarList;
+    }
+    
+    public void showUserKamar() {
+        ArrayList<Kamar> list = kamarList();
+        DefaultTableModel model = (DefaultTableModel) tblBookHotel.getModel();
+        Object[] row = new Object[4];
+        for (int i = 0; i < list.size(); i++) {
+            row[0] = list.get(i).getJenis();
+            row[1] = list.get(i).getFasilitas();
+            row[2] = list.get(i).getKuota();
+            row[3] = list.get(i).getHarga();
+            try {
+                
+            } catch (Exception e) {
+            }
+            model.addRow(row);
+        }
     }
 
     /**
@@ -52,16 +110,18 @@ public class BookHotelCus extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblBookHotel = new javax.swing.JTable();
         txtCheckIn = new javax.swing.JLabel();
         txtCheckOut = new javax.swing.JLabel();
         txtTotalHari = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnPesan = new javax.swing.JButton();
+        txtTotalBook = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblBookHotel.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        tblBookHotel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -77,7 +137,12 @@ public class BookHotelCus extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        tblBookHotel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBookHotelMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblBookHotel);
 
         txtCheckIn.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         txtCheckIn.setText("Tanggal Check In              :");
@@ -96,13 +161,16 @@ public class BookHotelCus extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
-        jButton2.setText("Pesan");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnPesan.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnPesan.setText("Pesan");
+        btnPesan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnPesanActionPerformed(evt);
             }
         });
+
+        txtTotalBook.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        txtTotalBook.setText("Harga Total :");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,17 +179,20 @@ public class BookHotelCus extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtCheckIn, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
-                    .addComponent(txtCheckOut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtTotalHari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(469, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCheckIn, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+                            .addComponent(txtCheckOut, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtTotalHari, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(469, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(txtTotalBook, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(230, 230, 230)
+                        .addComponent(btnPesan, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -134,9 +205,11 @@ public class BookHotelCus extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtTotalHari, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 92, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnPesan, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTotalBook, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -150,9 +223,109 @@ public class BookHotelCus extends javax.swing.JFrame {
         main.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnPesanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            String url = "jdbc:sqlserver://localhost:1433;databaseName=UBOOK;user=acer;password=123456";
+            Connection con = DriverManager.getConnection(url);
+            String query1 = "Select * from HOTEL where ID_Hotel=\'" + id + "\'";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(query1);
+            double a=Math.random()*1000;
+            Double newData=new Double(a);
+            System.out.println(a);
+            int rndmNumb=newData.intValue();
+            System.out.println(rndmNumb);
+            String idPesanan = id + rndmNumb;
+            System.out.println(idPesanan);
+            
+            String nama = "";
+            String alamat="";
+            if (rs.next()) {
+                nama = rs.getString("NAMA_HOTEL");
+            }
+            String query5 = "Select ALAMAT_HOTAEL from HOTEL_ALAMAT where ID_Hotel=\'" + id + "\'";
+            Statement st5 = con.createStatement();
+            ResultSet rs5 = st5.executeQuery(query5);
+            
+            if (rs5.next()) {
+                alamat = rs5.getString("ALAMAT_HOTAEL");
+            }
+            
+            System.out.println(alamat);
+            String idHotel = id;
+            int i = tblBookHotel.getSelectedRow();
+            TableModel model = tblBookHotel.getModel();
+            int hargaHotel = (Integer.parseInt(model.getValueAt(i, 3).toString()));
+            
+            String statusTransaksi = "Menunggu";
+            String checkIn = tglCheckIn;
+            String checkOut = tglCheckOut;
+            String jenisKamar = (String) model.getValueAt(i, 0);
+            
+            String query2 = "Select * from KAMAR join KAMAR_FASILITAS on kamar.NO_KAMAR=KAMAR_FASILITAS.NO_KAMAR where ID_Hotel=\'" + id + "\' and JENIS_KAMAR=\'"+jenisKamar+"\'";
+            Statement st2 = con.createStatement();
+            ResultSet rs2 = st2.executeQuery(query2);
+            
+            int noKamar=0;
+            if (rs2.next()) {
+                noKamar = Integer.parseInt(rs2.getString("NO_KAMAR"));
+            }
+            int total = hari * hargaHotel;
+            int noktpp = Integer.parseInt(noKtp);
+            
+            String query3 = "insert into KERANJANG(ID_PESANAN, NAMA_HOTEL, ID_HOTEL, GAMBAR, HARGA_HOTEL, STATUS_TRANSAKSI, TGLCHECKIN, TGLCHECKOUT, JENIS_KAMAR, NO_KAMAR,TOTAL_TAGIHAN,NO_KTP) "
+                    + "values(?,?,?,null,?,?,?,?,?,?,?,?)";
+            PreparedStatement pst = con.prepareStatement(query3);
+            pst.setString(1, idPesanan);
+            pst.setString(2, nama);
+            pst.setString(3, idHotel);
+            pst.setInt(4, hargaHotel);
+            pst.setString(5, statusTransaksi);
+            pst.setString(6, checkIn);
+            pst.setString(7, checkOut);
+            pst.setString(8, jenisKamar);
+            pst.setInt(9, noKamar);
+            pst.setInt(10, total);
+            pst.setInt(11, noktpp);
+            pst.executeUpdate();
+            String query4 = "insert into KERANJANG_ALAMATHOTEL(ALAMAT_HOTEL,ID_PESANAN) values(?,?)";
+            PreparedStatement pst3 = con.prepareStatement(query4);
+            pst3.setString(1, alamat);
+            pst3.setString(2, idPesanan);
+            pst3.executeUpdate();
+            
+            String query6="insert into STATUSMONITOR (ID_PESANAN,JUMLAH_TRANSFER,STATUS_TRANSAKSI,ID_ADMIN,NO_KTP)values (?,?,?,?,?)";
+            PreparedStatement pst6=con.prepareStatement(query6);
+            pst6.setString(1,idPesanan);
+            pst6.setInt(2,total);
+            pst6.setString(3,statusTransaksi);
+            pst6.setString(4,idHotel);
+            pst6.setInt(5,noktpp);
+            pst6.executeUpdate();
+            
+            
+            
+            JOptionPane.showMessageDialog(null, "Berhasil Menambahkan ke keranjang");
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e);
+        } catch (ClassNotFoundException ce) {
+            ce.printStackTrace();
+        }
+    }//GEN-LAST:event_btnPesanActionPerformed
+
+    private void tblBookHotelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBookHotelMouseClicked
+        // TODO add your handling code here:
+        int a = tblBookHotel.getSelectedRow();
+        TableModel tabModel = tblBookHotel.getModel();
+//        System.out.println(Integer.valueOf((String) tabModel.getValueAt(a, 3)));
+//        int total = hari * (Integer.valueOf((String) tabModel.getValueAt(a, 3)));
+        int total = hari * (Integer.parseInt(tabModel.getValueAt(a, 3).toString()));
+        txtTotalBook.setText("Harga Total : Rp. " + total);
+    }//GEN-LAST:event_tblBookHotelMouseClicked
 
     /**
      * @param args the command line arguments
@@ -190,12 +363,13 @@ public class BookHotelCus extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPesan;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tblBookHotel;
     private javax.swing.JLabel txtCheckIn;
     private javax.swing.JLabel txtCheckOut;
+    private javax.swing.JLabel txtTotalBook;
     private javax.swing.JLabel txtTotalHari;
     // End of variables declaration//GEN-END:variables
 }

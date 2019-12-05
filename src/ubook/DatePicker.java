@@ -22,7 +22,19 @@ public class DatePicker extends javax.swing.JFrame {
     /**
      * Creates new form DatePicker
      */
+    String id;
+    String noKtp;
+
     public DatePicker() {
+        initComponents();
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
+    }
+
+    public DatePicker(String id,String noKtp) {
+        this.id = id;
+        this.noKtp=noKtp;
         initComponents();
         Toolkit toolkit = getToolkit();
         Dimension size = toolkit.getScreenSize();
@@ -122,8 +134,8 @@ public class DatePicker extends javax.swing.JFrame {
         LocalDateTime to = LocalDateTime.ofInstant(checkOut.getDate().toInstant(), ZoneId.systemDefault());
 
         int d = Integer.parseInt((Long.toString(Duration.between(from, to).toDays())));
-        
-        BookHotelCus book = new BookHotelCus(d1, d2,d);
+
+        BookHotelCus book = new BookHotelCus(d1, d2, d, id,noKtp);
         book.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

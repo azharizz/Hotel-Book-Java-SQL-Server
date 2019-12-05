@@ -381,7 +381,7 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel21" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="fieldUsernameEmp" alignment="0" min="-2" pref="242" max="-2" attributes="0"/>
+                                      <Component id="txtLoginUsernameEmp" alignment="0" min="-2" pref="242" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="1" attributes="0">
@@ -389,7 +389,7 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel20" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="fieldPasswordEmp" alignment="0" min="-2" pref="242" max="-2" attributes="0"/>
+                                      <Component id="txtLoginPasswordEmp" alignment="0" min="-2" pref="242" max="-2" attributes="0"/>
                                       <Component id="btnSignInEmp" alignment="0" min="-2" pref="242" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -411,14 +411,14 @@
                           <Component id="jLabel21" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="fieldUsernameEmp" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtLoginUsernameEmp" alignment="0" max="32767" attributes="0"/>
                               <Component id="jLabel18" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jLabel20" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="fieldPasswordEmp" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtLoginPasswordEmp" alignment="0" max="32767" attributes="0"/>
                               <Component id="jLabel19" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
@@ -447,7 +447,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="fieldUsernameEmp">
+                <Component class="javax.swing.JTextField" name="txtLoginUsernameEmp">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="SansSerif" size="12" style="0"/>
@@ -455,7 +455,7 @@
                     <Property name="text" type="java.lang.String" value="Masukkan Username / Email"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="fieldUsernameEmpFocusGained"/>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtLoginUsernameEmpFocusGained"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel19">
@@ -465,7 +465,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JPasswordField" name="fieldPasswordEmp">
+                <Component class="javax.swing.JPasswordField" name="txtLoginPasswordEmp">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="SansSerif" size="12" style="0"/>
@@ -473,7 +473,7 @@
                     <Property name="text" type="java.lang.String" value="jPasswordField1"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="fieldPasswordEmpFocusGained"/>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtLoginPasswordEmpFocusGained"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel20">
